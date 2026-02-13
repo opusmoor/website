@@ -8,6 +8,7 @@
   <meta name="theme-color" content="#ffffff" />
   <meta name="color-scheme" content="light" />
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23fff'/%3E%3Ctext x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-family='monospace' font-weight='700' font-size='38' letter-spacing='1' fill='%231a1a1a'%3EOM%3C/text%3E%3C/svg%3E" />
+  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' fill='%23fff'/%3E%3Ctext x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-family='monospace' font-weight='700' font-size='108' letter-spacing='2' fill='%231a1a1a'%3EOM%3C/text%3E%3C/svg%3E" />
   <link rel="canonical" href="https://opusmoor.com/" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -112,7 +113,7 @@
       border-radius: 3px;
       pointer-events: none;
       clip-path: inset(0 100% 0 0);
-      animation: typeReveal 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+      animation: typeReveal 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
       max-width: calc(100vw - 2rem);
       overflow: hidden;
       text-overflow: ellipsis;
@@ -122,18 +123,20 @@
       display: inline-block;
       width: 0.5em;
       height: 1em;
-      background: #999;
+      background: #1a1a1a;
       vertical-align: text-bottom;
       margin-left: 2px;
-      animation: blink 0.8s step-end infinite;
     }
+    .prompt .cursor.blink { animation: blink 0.8s step-end infinite; }
+    .prompt .cursor.flash { animation: cursorFlash 0.18s steps(2) 1 forwards; }
     .prompt.hiding { animation: typeHide 0.25s cubic-bezier(0.55, 0.06, 0.68, 0.19) forwards; }
     @keyframes typeReveal { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
     @keyframes typeHide { from { clip-path: inset(0 0 0 0); } to { clip-path: inset(0 0 0 100%); } }
     @keyframes blink { 50% { opacity: 0; } }
+    @keyframes cursorFlash { 0% { opacity: 1; } 50% { opacity: 0; } 100% { opacity: 1; } }
     .copyright { font-size: 0.75rem; color: #bbb; letter-spacing: 0.03em; white-space: nowrap; }
     @media (prefers-reduced-motion: reduce) {
-      .prompt, .prompt.hiding { animation: none; }
+      .prompt, .prompt.hiding, .prompt .cursor.blink, .prompt .cursor.flash { animation: none; }
       .nav-link::after { transition: none; }
     }
     @media (max-width: 900px) {
@@ -190,10 +193,41 @@
         tip.className = 'prompt';
         tip.setAttribute('role', 'status');
         tip.setAttribute('aria-live', 'polite');
-        tip.innerHTML = text + '<span class="cursor"></span>';
+        var textSpan = document.createElement('span');
+        var cursorSpan = document.createElement('span');
+        cursorSpan.className = 'cursor';
+        cursorSpan.addEventListener('animationend', function () { cursorSpan.classList.remove('flash'); });
+        tip.appendChild(textSpan);
+        tip.appendChild(cursorSpan);
         btn.appendChild(tip);
         activePrompt = tip;
-        hideTimer = setTimeout(clearActive, 5000);
+        var baseDelay = 78;
+        var jitter = 22;
+        var wordPause = function () { return 160 + Math.random() * 140; };
+        if (text.length === 0) {
+          hideTimer = setTimeout(clearActive, 5000);
+          return;
+        }
+        var totalDelay = 0;
+        for (var i = 0; i < text.length; i++) {
+          var charDelay = Math.round(baseDelay + (Math.random() * 2 - 1) * jitter);
+          charDelay = Math.max(52, Math.min(115, charDelay));
+          if (i > 0 && text[i - 1] === ' ') totalDelay += wordPause();
+          totalDelay += charDelay;
+          (function (idx, t) {
+            setTimeout(function () {
+              if (activePrompt !== tip) return;
+              textSpan.textContent += text[idx];
+              cursorSpan.classList.remove('flash');
+              void cursorSpan.offsetHeight;
+              cursorSpan.classList.add('flash');
+              if (idx === text.length - 1) {
+                cursorSpan.classList.add('blink');
+                hideTimer = setTimeout(clearActive, 5000);
+              }
+            }, t);
+          })(i, totalDelay);
+        }
       }
       function showPromptFor(btn) {
         if (btn.dataset.action === 'contact') showPrompt(btn, 'contact@opusmoor.com');

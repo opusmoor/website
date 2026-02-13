@@ -210,7 +210,7 @@
       border-radius: 3px;
       pointer-events: none;
       clip-path: inset(0 100% 0 0);
-      animation: typeReveal 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+      animation: typeReveal 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
       max-width: calc(100vw - 2rem);
       overflow: hidden;
       text-overflow: ellipsis;
@@ -225,10 +225,17 @@
       display: inline-block;
       width: 0.5em;
       height: 1em;
-      background: #999;
+      background: #1a1a1a;
       vertical-align: text-bottom;
       margin-left: 2px;
+    }
+
+    .prompt .cursor.blink {
       animation: blink 0.8s step-end infinite;
+    }
+
+    .prompt .cursor.flash {
+      animation: cursorFlash 0.18s steps(2) 1 forwards;
     }
 
     .prompt.hiding {
@@ -247,6 +254,12 @@
 
     @keyframes blink {
       50% { opacity: 0; }
+    }
+
+    @keyframes cursorFlash {
+      0% { opacity: 1; }
+      50% { opacity: 0; }
+      100% { opacity: 1; }
     }
 
     .copyright {
@@ -288,7 +301,9 @@
         opacity: 1;
       }
       .prompt,
-      .prompt.hiding {
+      .prompt.hiding,
+      .prompt .cursor.blink,
+      .prompt .cursor.flash {
         animation: none;
       }
       .nav-link::after {
@@ -399,11 +414,42 @@
         tip.className = 'prompt';
         tip.setAttribute('role', 'status');
         tip.setAttribute('aria-live', 'polite');
-        tip.innerHTML = text + '<span class="cursor"></span>';
+        const textSpan = document.createElement('span');
+        const cursorSpan = document.createElement('span');
+        cursorSpan.className = 'cursor';
+        cursorSpan.addEventListener('animationend', () => cursorSpan.classList.remove('flash'));
+        tip.appendChild(textSpan);
+        tip.appendChild(cursorSpan);
         btn.appendChild(tip);
         activePrompt = tip;
 
-        hideTimer = setTimeout(() => clearActive(), 5000);
+        const baseDelay = 78;
+        const jitter = 22;
+        const wordPause = () => 160 + Math.random() * 140;
+        if (text.length === 0) {
+          hideTimer = setTimeout(() => clearActive(), 5000);
+          return;
+        }
+        let totalDelay = 0;
+        for (let i = 0; i < text.length; i++) {
+          let charDelay = Math.round(baseDelay + (Math.random() * 2 - 1) * jitter);
+          charDelay = Math.max(52, Math.min(115, charDelay));
+          if (i > 0 && text[i - 1] === ' ') totalDelay += wordPause();
+          totalDelay += charDelay;
+          const t = totalDelay;
+          const idx = i;
+          setTimeout(() => {
+            if (activePrompt !== tip) return;
+            textSpan.textContent += text[idx];
+            cursorSpan.classList.remove('flash');
+            void cursorSpan.offsetHeight;
+            cursorSpan.classList.add('flash');
+            if (idx === text.length - 1) {
+              cursorSpan.classList.add('blink');
+              hideTimer = setTimeout(() => clearActive(), 5000);
+            }
+          }, t);
+        }
       }
 
       function showPromptFor(btn) {
