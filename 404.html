@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Page not found – Opusmoor</title>
+  <meta name="theme-color" content="#ffffff" />
+  <meta name="color-scheme" content="light" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23fff'/%3E%3Ctext x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-family='monospace' font-weight='700' font-size='38' letter-spacing='1' fill='%231a1a1a'%3EOM%3C/text%3E%3C/svg%3E" />
+  <link rel="canonical" href="https://opusmoor.com/" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      font-family: "Fira Code", monospace;
+      font-weight: 400;
+      line-height: 1.6;
+      color: #1a1a1a;
+      background: #ffffff;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    .mark {
+      position: fixed;
+      top: 2.5rem;
+      left: 2.5rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      color: #1a1a1a;
+      z-index: 10;
+      text-decoration: none;
+    }
+    .mark:hover { color: #1a1a1a; }
+    main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6rem 2.5rem;
+    }
+    .content { max-width: 520px; width: 100%; text-align: center; }
+    .not-found-title {
+      font-size: 1.25rem;
+      font-weight: 400;
+      color: #666;
+      margin-bottom: 1rem;
+    }
+    .content a {
+      color: #1a1a1a;
+      text-decoration: none;
+      font-size: 0.8rem;
+      letter-spacing: 0.03em;
+      border-bottom: 1px solid #1a1a1a;
+      padding-bottom: 1px;
+    }
+    .content a:hover { color: #666; border-color: #666; }
+    footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      padding: 2.5rem;
+    }
+    .footer-nav { display: flex; gap: 0.5rem 1.25rem; flex-wrap: wrap; }
+    .nav-link {
+      position: relative;
+      font-family: "Fira Code", monospace;
+      font-size: 0.8rem;
+      font-weight: 400;
+      letter-spacing: 0.03em;
+      color: #999;
+      text-decoration: none;
+      padding: 0.5rem;
+      margin: -0.5rem;
+      transition: color 0.2s ease;
+    }
+    .nav-link:hover { color: #1a1a1a; }
+    .nav-link:focus-visible { outline: 2px solid #1a1a1a; outline-offset: 2px; }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background: #1a1a1a;
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s ease;
+    }
+    .nav-link:hover::after { transform: scaleX(1); transform-origin: right; }
+    .prompt {
+      position: absolute;
+      bottom: calc(100% + 1rem);
+      left: 0;
+      white-space: nowrap;
+      font-family: "Fira Code", monospace;
+      font-size: 0.7rem;
+      font-weight: 400;
+      letter-spacing: 0.02em;
+      color: #666;
+      background: #fafafa;
+      border: 1px solid #eee;
+      padding: 0.35rem 0.6rem;
+      border-radius: 3px;
+      pointer-events: none;
+      clip-path: inset(0 100% 0 0);
+      animation: typeReveal 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+      max-width: calc(100vw - 2rem);
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .prompt::before { content: '> '; color: #bbb; }
+    .prompt .cursor {
+      display: inline-block;
+      width: 0.5em;
+      height: 1em;
+      background: #999;
+      vertical-align: text-bottom;
+      margin-left: 2px;
+      animation: blink 0.8s step-end infinite;
+    }
+    .prompt.hiding { animation: typeHide 0.25s cubic-bezier(0.55, 0.06, 0.68, 0.19) forwards; }
+    @keyframes typeReveal { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+    @keyframes typeHide { from { clip-path: inset(0 0 0 0); } to { clip-path: inset(0 0 0 100%); } }
+    @keyframes blink { 50% { opacity: 0; } }
+    .copyright { font-size: 0.75rem; color: #bbb; letter-spacing: 0.03em; white-space: nowrap; }
+    @media (prefers-reduced-motion: reduce) {
+      .prompt, .prompt.hiding { animation: none; }
+      .nav-link::after { transition: none; }
+    }
+    @media (max-width: 900px) {
+      .mark { top: 1.75rem; left: 1.75rem; font-size: 1rem; }
+      main { padding: 5rem 1.75rem; }
+    }
+    @media (max-width: 768px) {
+      footer { flex-direction: column; gap: 1.25rem; align-items: flex-start; }
+      .footer-nav { flex-direction: column; align-items: flex-start; gap: 1.25rem; }
+      .prompt { bottom: auto; left: 100%; top: 50%; transform: translateY(-50%); margin-left: 0.75rem; }
+    }
+    @media (max-width: 640px) {
+      .mark { top: 1.25rem; left: 1.25rem; font-size: 0.9rem; }
+      main { padding: 4rem 1.25rem; }
+      .nav-link { font-size: 0.75rem; }
+    }
+  </style>
+</head>
+<body>
+  <a href="/" class="mark">OM</a>
+  <main>
+    <div class="content">
+      <h1 class="not-found-title">Page not found</h1>
+      <p><a href="/">Back to home</a></p>
+    </div>
+  </main>
+  <footer>
+    <nav class="footer-nav">
+      <a href="/services" class="nav-link" data-soon="Unified Product &amp; Systems Security">Services</a>
+      <a href="/partners" class="nav-link" data-soon>Partners</a>
+      <a href="/projects" class="nav-link" data-soon>Projects</a>
+      <a href="/privacy" class="nav-link" data-soon>Privacy</a>
+      <a href="/careers" class="nav-link" data-soon="Hiring">Careers</a>
+      <a href="/contact" class="nav-link" data-action="contact" aria-label="Contact">Contact Us</a>
+    </nav>
+    <span class="copyright">&copy; 2025 Opusmoor</span>
+  </footer>
+  <script>
+    (function () {
+      var activePrompt = null;
+      var hideTimer = null;
+      function clearActive() {
+        if (activePrompt) {
+          activePrompt.classList.add('hiding');
+          var el = activePrompt;
+          el.addEventListener('animationend', function () { el.remove(); }, { once: true });
+          activePrompt = null;
+        }
+        clearTimeout(hideTimer);
+      }
+      function showPrompt(btn, text) {
+        clearActive();
+        var tip = document.createElement('span');
+        tip.className = 'prompt';
+        tip.setAttribute('role', 'status');
+        tip.setAttribute('aria-live', 'polite');
+        tip.innerHTML = text + '<span class="cursor"></span>';
+        btn.appendChild(tip);
+        activePrompt = tip;
+        hideTimer = setTimeout(clearActive, 5000);
+      }
+      function showPromptFor(btn) {
+        if (btn.dataset.action === 'contact') showPrompt(btn, 'contact@opusmoor.com');
+        else if (btn.hasAttribute('data-soon')) showPrompt(btn, btn.dataset.soon || 'Coming Soon');
+      }
+      document.querySelectorAll('.nav-link').forEach(function (btn) {
+        btn.addEventListener('mouseenter', function () { showPromptFor(btn); });
+        btn.addEventListener('focus', function () { showPromptFor(btn); });
+      });
+      document.addEventListener('click', function (e) {
+        if (!e.target.closest('.nav-link')) clearActive();
+      });
+    })();
+  </script>
+</body>
+</html>
