@@ -460,14 +460,15 @@
         }
       }
 
-      document.querySelectorAll('.nav-link').forEach(btn => {
-        btn.addEventListener('mouseenter', () => showPromptFor(btn));
-        btn.addEventListener('focus', () => showPromptFor(btn));
-      });
-
-      document.addEventListener('click', (e) => {
-        if (!e.target.closest('.nav-link')) clearActive();
-      });
+      if (window.matchMedia('(hover: hover)').matches) {
+        document.querySelectorAll('.nav-link').forEach(btn => {
+          btn.addEventListener('mouseenter', () => showPromptFor(btn));
+          btn.addEventListener('focus', () => showPromptFor(btn));
+        });
+        document.addEventListener('click', (e) => {
+          if (!e.target.closest('.nav-link')) clearActive();
+        });
+      }
     })();
   </script>
 </body>

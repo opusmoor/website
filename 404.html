@@ -233,13 +233,15 @@
         if (btn.dataset.action === 'contact') showPrompt(btn, 'contact@opusmoor.com');
         else if (btn.hasAttribute('data-soon')) showPrompt(btn, btn.dataset.soon || 'Coming Soon');
       }
-      document.querySelectorAll('.nav-link').forEach(function (btn) {
-        btn.addEventListener('mouseenter', function () { showPromptFor(btn); });
-        btn.addEventListener('focus', function () { showPromptFor(btn); });
-      });
-      document.addEventListener('click', function (e) {
-        if (!e.target.closest('.nav-link')) clearActive();
-      });
+      if (window.matchMedia('(hover: hover)').matches) {
+        document.querySelectorAll('.nav-link').forEach(function (btn) {
+          btn.addEventListener('mouseenter', function () { showPromptFor(btn); });
+          btn.addEventListener('focus', function () { showPromptFor(btn); });
+        });
+        document.addEventListener('click', function (e) {
+          if (!e.target.closest('.nav-link')) clearActive();
+        });
+      }
     })();
   </script>
 </body>
