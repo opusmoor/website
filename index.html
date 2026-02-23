@@ -38,7 +38,6 @@
   <meta name="color-scheme" content="light" />
   
   <!-- Performance Optimization -->
-  <link rel="preload" as="video" href="opsumooranimation.mp4" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&display=swap" rel="stylesheet">
@@ -91,6 +90,8 @@
       letter-spacing: 0.15em;
       color: #1a1a1a;
       z-index: 10;
+      opacity: 0;
+      animation: fadeIn 0.6s ease-out 0.2s forwards;
       text-decoration: none;
     }
 
@@ -108,62 +109,30 @@
     }
 
     .content {
-      max-width: 580px;
+      max-width: 520px;
       width: 100%;
       text-align: center;
     }
 
-    .hero-video {
+    .shapes {
       max-width: 100%;
-      width: 580px;
       height: auto;
       display: block;
-      margin: 0 auto;
+      margin: -2% auto 0;
       position: relative;
-      z-index: 2;
-    }
-
-    /* Lighthouse: fixed bottom-right, behind footer text */
-    .lighthouse-video {
-      position: fixed;
-      bottom: 0;
-      right: 0;
-      width: 140px;
-      height: auto;
       z-index: 1;
-      pointer-events: none;
-    }
-
-    .lighthouse-video video {
-      width: 100%;
-      height: auto;
-      vertical-align: bottom;
-      object-fit: contain;
-      transform: translateZ(0);
-      backface-visibility: hidden;
-      will-change: transform;
-    }
-
-    @media (min-width: 901px) {
-      .lighthouse-video {
-        width: 260px;
-      }
+      opacity: 0;
+      animation: fadeIn 0.8s ease-out 0.5s forwards;
     }
 
     /* Footer */
     footer {
-      position: relative;
-      z-index: 2;
       display: flex;
       justify-content: space-between;
       align-items: flex-end;
       padding: 2.5rem;
-    }
-
-    .footer-left {
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
+      opacity: 0;
+      animation: fadeIn 0.8s ease-out 1s forwards;
     }
 
     .footer-nav {
@@ -286,7 +255,17 @@
       color: #bbb;
       letter-spacing: 0.03em;
       white-space: nowrap;
-      padding-top: 0.5rem;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     .visually-hidden {
@@ -302,6 +281,12 @@
     }
 
     @media (prefers-reduced-motion: reduce) {
+      .mark,
+      .shapes,
+      footer {
+        animation: none;
+        opacity: 1;
+      }
       .prompt,
       .prompt.hiding,
       .prompt .cursor.blink,
@@ -325,9 +310,11 @@
       }
     }
 
-    /* Single breakpoint: stack links vertically below 768px */
+    /* Single breakpoint: stack footer and links below 768px */
     @media (max-width: 768px) {
       footer {
+        flex-direction: column;
+        gap: 1.25rem;
         align-items: flex-start;
       }
 
@@ -369,54 +356,26 @@
   <main>
     <h1 class="visually-hidden">Opusmoor</h1>
     <div class="content">
-      <video
-        id="hero-video"
-        class="hero-video"
-        src="opsumooranimation.mp4"
-        width="580"
-        height="218"
-        autoplay
-        playsinline
-        muted
-        preload="auto"
-        aria-label="Opusmoor"></video>
+      <img src="companyshapes.png" 
+        alt="Opusmoor geometric shapes" 
+        class="shapes"
+        width="520"
+        height="65">
     </div>
   </main>
-  <div class="lighthouse-video" aria-hidden="true">
-    <video src="lighthouseanimation.mp4" autoplay loop muted playsinline preload="auto"></video>
-  </div>
   <footer>
-    <div class="footer-left">
-      <nav class="footer-nav">
-        <a href="/services" class="nav-link" data-soon="Unified Product &amp; Systems Security">Services</a>
-        <a href="/partners" class="nav-link" data-soon>Partners</a>
-        <a href="/products" class="nav-link" data-soon>Products</a>
-        <!-- <a href="/privacy" class="nav-link" data-soon>Privacy</a> -->
-        <a href="/careers" class="nav-link" data-soon="Hiring">Careers</a>
-        <a href="/contact" class="nav-link" data-action="contact" aria-label="Contact">Contact Us</a>
-      </nav>
-      <span class="copyright">&copy; 2025 Opusmoor</span>
-    </div>
+    <nav class="footer-nav">
+      <a href="/services" class="nav-link" data-soon="Unified Product &amp; Systems Security">Services</a>
+      <a href="/partners" class="nav-link" data-soon>Partners</a>
+      <a href="/products" class="nav-link" data-soon>Products</a>
+      <a href="/privacy" class="nav-link" data-soon>Privacy</a>
+      <a href="/careers" class="nav-link" data-soon="Hiring">Careers</a>
+      <a href="/contact" class="nav-link" data-action="contact" aria-label="Contact">Contact Us</a>
+    </nav>
+    <span class="copyright">&copy; 2025 Opusmoor</span>
   </footer>
   <script>
     (function () {
-      (function () {
-        var heroVideo = document.getElementById('hero-video');
-        var key = 'opusmoor_hero_played';
-        if (!heroVideo) return;
-        if (sessionStorage.getItem(key)) {
-          heroVideo.removeAttribute('autoplay');
-          heroVideo.addEventListener('loadedmetadata', function () {
-            heroVideo.currentTime = heroVideo.duration;
-            heroVideo.pause();
-          }, { once: true });
-        } else {
-          heroVideo.addEventListener('ended', function () {
-            sessionStorage.setItem(key, '1');
-          }, { once: true });
-        }
-      })();
-
       let activePrompt = null;
       let hideTimer = null;
 
